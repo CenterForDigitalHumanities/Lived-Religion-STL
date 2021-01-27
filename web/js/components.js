@@ -20,28 +20,12 @@ customElements.define("lr-footer", LrFooter)
 class LrNav extends HTMLElement {
     constructor() {
         super()
-        addEventListener('lrUserKnown', event => {
-            let user = event.detail.user
-            if(user !== null){
-                this.querySelector('.tabs').innerHTML = `<a class="active" href="dashboard.html">Dashboard</a>
-                <a href="places.html">Locations</a>
-                <a href="objects.html">Objects</a>
-                <a href="people.html">People</a>
-                <a href="map.html">Map View</a>
-                `
-                if(user.roles.administrator){
-                    let adminTabs = `<a href="users.html">Users</a>
-                    <a href="researchers.html">Researchers</a>
-                    <a href="all_experiences.html">Experiences</a>`
-                    this.querySelector('.tabs').innerHTML += adminTabs
-                }
-            }
-        })
     }
     connectedCallback() {
         this.innerHTML = `<div class="nav-left">
         <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
         <div class="tabs">
+            <a href="all_experiences.html">Experiences</a>
             <a href="places.html">Locations</a>
             <a href="objects.html">Objects</a>
             <a href="people.html">People</a>
@@ -96,13 +80,7 @@ class LrLogin extends HTMLElement {
             <backdrop class="is-full-screen">
             <form class="is-vertical-align is-horizontal-align">
             <fieldset>
-            <legend>Enter User Details</legend>
-            Username
-            <input type="text" name="user" /> Password
-            <input type="password" name="pwd" />
-            <input type="submit" value="Login" />
-            <input type="button" value="Forgot" disabled />    
-            </fieldset>
+            <legend>Login to the LR Data Management App</legend>
             </form>
             </backdrop>`
             document.body.style.overflowY = 'hidden'
@@ -113,9 +91,7 @@ class LrLogin extends HTMLElement {
             let lrLogin = this
             lrLogin.querySelector('FORM').onsubmit = async function(event) {
                 event.preventDefault()
-                let data = new FormData(this)
-                let userData = await LR.utils.login(lrLogin, data, event)
-                
+                document.location.href="http://lived-religion.rerum.io/"
             }
         } catch (err) {
             // already logged in or other error
