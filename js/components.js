@@ -23,83 +23,19 @@ class LrNav extends HTMLElement {
     }
     connectedCallback() {
         this.innerHTML = `<div class="nav-left">
-        <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
-        <div class="tabs">
-            <a href="all_experiences.html">Experiences</a>
-            <a href="places.html">Locations</a>
-            <a href="objects.html">Objects</a>
-            <a href="people.html">People</a>
-            <a href="map.html">Map View</a>
-        </div>
-    </div>
-    <div class="nav-right">
-        <lr-login></lr-login>
-    </div>`
+            <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
+            <div class="tabs">
+                <a href="all_experiences.html">Experiences</a>
+                <a href="places.html">Locations</a>
+                <a href="objects.html">Objects</a>
+                <a href="people.html">People</a>
+                <a href="map.html">Map View</a>
+            </div>
+        </div>`
         this.classList.add('nav')
     }
 }
 customElements.define("lr-nav", LrNav)
-
-class LrLogin extends HTMLElement {
-    constructor() {
-        super()
-        let user = localStorage.getItem("lr-user")
-        if (user !== null) {
-            try {
-                user = JSON.parse(user)
-                this.setAttribute("lr-user", user["@id"])
-                dispatchEvent(new CustomEvent('lrUserKnown', { detail: { user: user }, composed: true, bubbles: true }))
-            } catch (err) {
-                console.log("User identity reset; unable to parse ", localStorage.getItem("lr-user"))
-                document.location.href="logout.html"
-            }
-        }
-        if (this.hasAttribute("lr-user")) {
-            //<a>${user.name}</a>
-            this.innerHTML = `<div class="tabs">
-                <a title="${user.name}" href="logout.html">Logout</a>
-            </div>`
-        } else {
-            this.innerHTML = `
-            <style>
-            backdrop {
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 9000;
-                background-color: rgba(7,42,12,1);
-            }
-            fieldset {
-                background: #FFF;
-                box-shadow: 0 0 0 2rem #FFF, .25rem .25rem 2rem 2rem #000;
-                top: 15vh;
-                position: relative;
-            }
-
-            </style>
-            <backdrop class="is-full-screen">
-            <form class="is-vertical-align is-horizontal-align">
-            <fieldset>
-            <legend>Login to the LR Data Management App</legend>
-            </form>
-            </backdrop>`
-            document.body.style.overflowY = 'hidden'
-        }
-    }
-    connectedCallback() {
-        try {
-            let lrLogin = this
-            lrLogin.querySelector('FORM').onsubmit = async function(event) {
-                event.preventDefault()
-                document.location.href="http://lived-religion.rerum.io/"
-            }
-        } catch (err) {
-            // already logged in or other error
-            // TODO: focus this catch
-        }
-    }
-}
-customElements.define("lr-login", LrLogin)
 
 class LrGlobalFeedback extends HTMLElement {
     constructor() {

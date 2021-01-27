@@ -534,24 +534,13 @@ let LR_primitives = ["additionalType"]
 let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
-//Comment this out for dev-01 deploys
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://store.rerum.io/v1/since"
-}
-
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
+//import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
 
 // fire up the element detection as needed
 /**
@@ -560,4 +549,5 @@ import { default as record, initializeDeerForms } from 'https://centerfordigital
  * elements in the DOM to do things like pre-filling or pre-select values, which much exist in the DOM for such interaction.
  * We seek to streamline the logic around these threads in the near future.  Make sure these remain treated as asyncronous.
  */
-initializeDeerViews(DEER).then(() => initializeDeerForms(DEER))
+initializeDeerViews(DEER)
+//.then(() => initializeDeerForms(DEER))
