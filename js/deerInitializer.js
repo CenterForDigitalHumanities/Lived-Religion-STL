@@ -529,6 +529,8 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
     }
 }
 
+DEER.URLS.QUERY = "http://tiny.rerum.io/app/query"
+
 let LR_primitives = ["additionalType"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
 let DEERprimitives = DEER.PRIMITIVES
