@@ -75,8 +75,6 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     }
 }
 
-
-
 /**
  * Represent a collection as a <select multiple> HTML multi-select.  
  * Include the ability to quickly add an item to the collection, which will then be selected.
@@ -142,14 +140,14 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
 
 DEER.TEMPLATES.Event = function(experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
+        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2>
+        <dl>`
         let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
         let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
         let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : {"items":[]}
         let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : {"items":[]}
         let place = experienceData.location ? UTILS.getValue(experienceData.location) : ""
-        let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
         let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
         let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
        
@@ -250,7 +248,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
@@ -270,7 +267,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
@@ -288,7 +284,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         })
         let objectsHTML = `
             <h4>Objects at Experience "${UTILS.getLabel(experienceData)}"</h4>
-            <p>Objects you add will appear here and can be removed, but not edited.</p>
             <ul id="objectsInExperience">
                 ${relatedObjectsByName}
             </ul>
@@ -306,7 +301,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
@@ -326,7 +320,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
@@ -344,7 +337,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         })
         let practicesHTML = `
             <h4>Practices at Experience "${UTILS.getLabel(experienceData)}"</h4>
-            <p>Practices you add will appear here and can be removed, but not edited.</p>
             <ul id="practicesInExperience">
                 ${relatedPracticesByName}
             </ul>
@@ -362,7 +354,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="mostUpToLabelHelper"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
@@ -382,7 +373,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
@@ -400,7 +390,6 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         })
         let sensesHTML = `
             <h4>Senses at Experience "${UTILS.getLabel(experienceData)}"</h4>
-            <p>Senses you add will appear here and can be removed, but not edited.</p>
             <ul id="sensesInExperience">
                 ${relatedSensesByName}
             </ul>
@@ -415,7 +404,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
         return tmpl
     } catch (err) {
-        console.log("Could not build Event or ExperienceUpload template.")
+        console.log("Could not build Event-detail template.")
         console.error(err)
         return null
     }
