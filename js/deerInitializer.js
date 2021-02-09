@@ -429,7 +429,7 @@ DEER.TEMPLATES.list= function(obj, options={}) {
                 let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
                 let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
                 onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
-                let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
+                let viewBtn = (val["@id"] && options.link) ? `<a class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
                 tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
             })
             tmpl += `</ul>`
