@@ -147,9 +147,9 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : { "items": [] }
         let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : { "items": [] }
         let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : { "items": [] }
-        let place = experienceData.location ? UTILS.getValue(experienceData.location) : ""
-        let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
-        let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
+        let place = experienceData.location ? UTILS.getValue(experienceData.location) : " no location "
+        let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : " no date "
+        let description = experienceData.description ? UTILS.getValue(experienceData.description) : " no description "
 
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = ""
@@ -201,7 +201,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = `<li> ${val} </li>`
+                    name = `<li> ${val||" no constributors recorded "} </li>`
                 }
             }
             contributorsByName += name
@@ -223,7 +223,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     name = `<li> ${itemURI} </li>`
                 }
             }
-            else {
+            else if (typeof val === "string"){
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
@@ -233,6 +233,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     //TODO what should we do here?
                     name = `<li> ${val} </li>`
                 }
+            } else {
+                name += `<li> no people recorded </li>`
             }
             peopleByName += name
         })
@@ -261,7 +263,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             }
-            else {
+            else if (typeof val === "string"){
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
@@ -279,6 +281,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     </li>
                     `
                 }
+            } else {
+                name+=`<li> no objects recorded </li>`
             }
             relatedObjectsByName += name
         })
@@ -314,7 +318,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             }
-            else {
+            else if (typeof val === "string") {
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
@@ -332,6 +336,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     </li>
                     `
                 }
+            } else {
+                name += `<li> no practices recorded </li>`
             }
             relatedPracticesByName += name
         })
@@ -367,7 +373,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             }
-            else {
+            else if (typeof val === "string") {
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
@@ -385,6 +391,8 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     </li>
                     `
                 }
+            } else {
+                name+=`<li> no senses recorded </li>`
             }
             relatedSensesByName += name
         })
@@ -427,10 +435,8 @@ DEER.TEMPLATES.list = function (obj, options = {}) {
             obj[options.list].forEach((val, index) => {
                 let currentKnownLabel = UTILS.getLabel(val, (val.type || val['@type'] || "")) //May not be the most recent.  
                 let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
-                let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-                onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
                 let viewBtn = (val["@id"] && options.link) ? `<a class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-                tmpl += val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
+                tmpl += val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}</li>` : `<li>${name}</li>`
             })
             tmpl += `</ul>`
         }
