@@ -157,7 +157,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
             //Then the URI is the value
             let placeURI = UTILS.getValue(place)
             if (placeURI.indexOf("http://") > -1 || placeURI.indexOf("https://") > -1) {
-                placeLabelHTML = `<deer-view deer-id="${placeURI}" deer-template="label"></deer-view>`
+                placeLabelHTML = `<a href="place.html?id=${placeURI}"><deer-view deer-id="${placeURI}" deer-template="label"></deer-view></a>`
             }
             else {
                 //We know it is just a string of some kind, probably the label they want to display, so just use it.
@@ -169,7 +169,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
             // The URI is this string, probably
             if (place.indexOf("http://") > -1 || place.indexOf("https://") > -1) {
                 //Gamble that it is a resolvable ID...
-                placeLabelHTML = `<deer-view deer-id="${place}" deer-template="label"></deer-view>`
+                placeLabelHTML = `<a href="place.html?id=${place}"><deer-view deer-id="${place}" deer-template="label"></deer-view></a>`
             }
             else {
                 //We know it is just a string of some kind, probably the label they want to display, so just use it.
@@ -247,7 +247,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 if (itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1) {
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
+                        <a href="object.html?id=${itemURI}><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></a>
                     </li>
                     `
                 }
@@ -266,7 +266,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="label"></deer-view>
+                        <a href="object.html?id=${val}"><deer-view deer-id="${val}" deer-template="label"></deer-view></a>
                     </li>
                     `
                 }
