@@ -96,19 +96,6 @@ and open the template in the editor.
             </p>
             <div id="leafletInstanceContainer"><div id="loadingMessage" style="text-align: center;">Gathering Lived Religion Resource Coordinates...</div></div>
         
-            <!--
-            <div class="col">
-                <div class="row">
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color1" value="Demo" app="MapDemo" onclick="MAPINTERACTION.filterMarkers(event)"/>
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color2" value="Lived Religion" app="Lived_Religion" onclick="MAPINTERACTION.filterMarkers(event)" />
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color3" value="T-PEN"  app="T-PEN" onclick="MAPINTERACTION.filterMarkers(event)" />
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color4" value="Mirador" app="Mirador" onclick="MAPINTERACTION.filterMarkers(event)" />
-                    <input title="Toggle annotations that target this application's data" type="button" class="tag is-small color5" value="IIIF App" app="IIIF_Coordinates_Annotator" onclick="MAPINTERACTION.filterMarkers(event)" />
-                    <input title="Toggle annotations that target IIIF resources." type="button" class="tag is-small color6" value="IIIFy" app="isIIIF" onclick="MAPINTERACTION.filterMarkers(event)" />
-                </div>
-            </div>
-            -->
-        
             <div class="card">
                 <header>Supply a latitude and longitude to fly to.  Last Supplied Coordinates <span id="currentCoords">[38.6360699, -90.2348349]</span></header>
                 <div class="card_body">
@@ -119,7 +106,6 @@ and open the template in the editor.
                 </div>
                 <footer>
                     <input id='goToCoords' value="Go To Coordinates" type="button" class="tag is-small" onclick="MAPINTERACTION.goToCoords(event)"/>
-                    <!--<input value="Refresh Markers" type="button" class="tag is-small" onclick="MAPINTERACTION.refreshMarkers(event)"/>--> 
                 </footer>
             </div>
         </div>
@@ -127,9 +113,7 @@ and open the template in the editor.
         <lr-footer></lr-footer>
         <div id="locations" deer-collection="LivedReligionLocations" class="deer-view col is-hidden"></div>
     </body>
-    <script src="./js/sysendBroadcaster.js" type="text/javascript"></script>
     <script>
-        
        
         /**
          * Use Shift + Z to do the zoom out to xsee dots across the globe.

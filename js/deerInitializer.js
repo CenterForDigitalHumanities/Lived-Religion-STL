@@ -13,6 +13,7 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 
 // Identify a UTILS package
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
+UTILS.getSafeValue = (property, alsoPeek, asType) => property ? UTILS.getValue(property, alsoPeek, asType) : ""
 
 /**
  * Represent a collection as a <select> HTML dropdown.  
@@ -21,34 +22,34 @@ import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/d
  * @param {type} options
  * @return {tmpl}
  */
-DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
+DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
-        if(whichCollection){
+        if (whichCollection) {
             let check = whichCollection.replace("Test", "")
-            switch(check){
+            switch (check) {
                 case "LivedReligionLocations":
                     type = "Place"
-                break
+                    break
                 case "LivedReligionObjects":
                     type = "Thing"
-                break
+                    break
                 case "LivedReligionExperiences":
                     type = "Event"
-                break
+                    break
                 case "LivedReligionResearchers":
                     type = "Researcher"
-                break
+                    break
                 case "LivedReligionPeople":
                     type = "Person"
-                break
-                default :
-                    console.error("This is an unknown collection: "+whichCollection+".")
+                    break
+                default:
+                    console.error("This is an unknown collection: " + whichCollection + ".")
                     return null
             }
         }
-        else{
+        else {
             console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
             console.log(obj)
             return null
@@ -62,7 +63,7 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
         </div>`
         let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
         tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allPlacesInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        let allPlacesInCollection = obj.itemListElement ? UTILS.getSafeValue(obj.itemListElement) : []
         for (let place of allPlacesInCollection) {
             tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
         }
@@ -75,8 +76,6 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
     }
 }
 
-
-
 /**
  * Represent a collection as a <select multiple> HTML multi-select.  
  * Include the ability to quickly add an item to the collection, which will then be selected.
@@ -84,34 +83,34 @@ DEER.TEMPLATES.itemsAsDropdown = function(obj, options = {}) {
  * @param {type} options
  * @return {tmpl}
  */
-DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
+DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
     try {
         let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
         let type = ""
-        if(whichCollection){
+        if (whichCollection) {
             let check = whichCollection.replace("Test", "")
-            switch(check){
+            switch (check) {
                 case "LivedReligionLocations":
                     type = "Place"
-                break
+                    break
                 case "LivedReligionObjects":
                     type = "Thing"
-                break
+                    break
                 case "LivedReligionExperiences":
                     type = "Event"
-                break
+                    break
                 case "LivedReligionResearchers":
                     type = "Researcher"
-                break
+                    break
                 case "LivedReligionPeople":
                     type = "Person"
-                break
-                default :
-                    console.error("This is an unknown collection: "+whichCollection+".")
+                    break
+                default:
+                    console.error("This is an unknown collection: " + whichCollection + ".")
                     return null
             }
         }
-        else{
+        else {
             console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
             console.log(obj)
             return null
@@ -124,7 +123,7 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
             <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
         </div>`
         let selected = `<div class="selectedEntities"></div>`
-        let allLocationsInCollection = obj.itemListElement ? UTILS.getValue(obj.itemListElement) : []
+        let allLocationsInCollection = obj.itemListElement ? UTILS.getSafeValue(obj.itemListElement) : []
         let tmpl = `${quickAddTmpl}`
         tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
             <optgroup label="Choose Below"> `
@@ -140,121 +139,122 @@ DEER.TEMPLATES.itemsAsMultiSelect = function(obj, options = {}) {
     }
 }
 
-DEER.TEMPLATES.Event = function(experienceData, options = {}) {
+DEER.TEMPLATES.Event = function (experienceData, options = {}) {
     try {
-        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2> <a class="button primary pull-right" area="startExperience" onclick="LR.ui.toggleAreas(event)" title="Edit the base information about this experience.">Edit</a><dl>`
-        let contributors = experienceData.contributor ? UTILS.getValue(experienceData.contributor) : {"items":[]}
-        let people = experienceData.attendee ? UTILS.getValue(experienceData.attendee) : {"items":[]}
-        let relatedObjects = experienceData.object ? UTILS.getValue(experienceData.object) : {"items":[]}
-        let relatedSenses = experienceData.relatedSenses ? UTILS.getValue(experienceData.relatedSenses) : {"items":[]}
-        let relatedPractices = experienceData.relatedPractices ? UTILS.getValue(experienceData.relatedPractices) : {"items":[]}
-        let place = experienceData.location ? UTILS.getValue(experienceData.location) : ""
-        let fieldNotes = experienceData.fieldNotes ? UTILS.getValue(experienceData.fieldNotes) : ""
-        let date = experienceData.startDate ? UTILS.getValue(experienceData.startDate) : ""
-        let description = experienceData.description ? UTILS.getValue(experienceData.description) : ""
-       
+        let tmpl = `<h2>${UTILS.getLabel(experienceData)}</h2>
+        <dl>`
+        let contributors = experienceData.contributor ? UTILS.getSafeValue(experienceData.contributor) : { "items": [] }
+        let people = experienceData.attendee ? UTILS.getSafeValue(experienceData.attendee) : { "items": [] }
+        let relatedObjects = experienceData.object ? UTILS.getSafeValue(experienceData.object) : { "items": [] }
+        let relatedSenses = experienceData.relatedSenses ? UTILS.getSafeValue(experienceData.relatedSenses) : { "items": [] }
+        let relatedPractices = experienceData.relatedPractices ? UTILS.getSafeValue(experienceData.relatedPractices) : { "items": [] }
+        let place = experienceData.location ? UTILS.getSafeValue(experienceData.location) : " no location "
+        let date = experienceData.startDate ? UTILS.getSafeValue(experienceData.startDate) : " no date "
+        let description = experienceData.description ? UTILS.getSafeValue(experienceData.description) : " no description "
+
         //experienceData.location is most likely a String that is a URI, we want the label
         let placeLabelHTML = ""
-        if(typeof place === "object"){
+        if (typeof place === "object") {
             //Then the URI is the value
-            let placeURI = UTILS.getValue(place)
-            if(placeURI.indexOf("http://") > -1 || placeURI.indexOf("https://") > -1){
-                placeLabelHTML = `<deer-view deer-id="${placeURI}" deer-template="label"></deer-view>`
+            let placeURI = UTILS.getSafeValue(place)
+            if (placeURI.indexOf("http://") > -1 || placeURI.indexOf("https://") > -1) {
+                placeLabelHTML = `<a href="place.html?id=${placeURI}"><deer-view deer-id="${placeURI}" deer-template="label"></deer-view></a>`
             }
-            else{
+            else {
                 //We know it is just a string of some kind, probably the label they want to display, so just use it.
                 //TODO what should we do here?
                 placeLabelHTML = placeURI
             }
         }
-        else{
+        else {
             // The URI is this string, probably
-            if(place.indexOf("http://") > -1 || place.indexOf("https://") > -1){
+            if (place.indexOf("http://") > -1 || place.indexOf("https://") > -1) {
                 //Gamble that it is a resolvable ID...
-                placeLabelHTML = `<deer-view deer-id="${place}" deer-template="label"></deer-view>`
+                placeLabelHTML = `<a href="place.html?id=${place}"><deer-view deer-id="${place}" deer-template="label"></deer-view></a>`
             }
-            else{
+            else {
                 //We know it is just a string of some kind, probably the label they want to display, so just use it.
                 placeLabelHTML = place
             }
         }
-        
+
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let contributorsByName = ``
-        contributors.items.forEach((val)=>{
+        contributors.items.filter(v=>v.length>0).forEach((val) => {
             let name = ""
-            if(typeof val === "object"){
-                let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+            if (typeof val === "object") {
+                let itemURI = UTILS.getSafeValue(val)
+                if (itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1) {
                     //item.value is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
                 }
-                else{
+                else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name =  `<li> ${itemURI} </li>`
+                    name = `<li> ${itemURI} </li>`
                 }
             }
-            else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+            else {
+                if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
                 }
-                else{
+                else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = `<li> ${val} </li>`
+                    name = `<li> ${val||" no contributors recorded "} </li>`
                 }
             }
             contributorsByName += name
         })
-        
+
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let peopleByName = ``
-        people.items.forEach((val)=>{
+        people.items.filter(v=>v.length>0).forEach((val) => {
             let name = ""
-            if(typeof val === "object"){
-                let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+            if (typeof val === "object") {
+                let itemURI = UTILS.getSafeValue(val)
+                if (itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1) {
                     //item.value is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></li>`
                 }
-                else{
+                else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name =  `<li> ${itemURI} </li>`
+                    name = `<li> ${itemURI} </li>`
                 }
             }
-            else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+            else if (typeof val === "string"){
+                if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
                 }
-                else{
+                else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
                     name = `<li> ${val} </li>`
                 }
+            } else {
+                name += `<li> no people recorded </li>`
             }
             peopleByName += name
         })
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = ``
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
-        relatedObjects.items.forEach((val)=>{
+        relatedObjects.items.filter(v=>v.length>0).forEach((val) => {
             let name = ""
-            if(typeof val === "object"){
+            if (typeof val === "object") {
                 //See if the value is the URI we want
-                let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                let itemURI = UTILS.getSafeValue(val)
+                if (itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1) {
                     name = `
                     <li>
-                        <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
+                        <a href="object.html?id=${itemURI}><deer-view deer-id="${itemURI}" deer-template="label"></deer-view></a>
                     </li>
                     `
                 }
-                else{
+                else {
                     //We know it is just a string of some kind.  Just use it.
                     //TODO what should we do here?
                     name = `
@@ -264,17 +264,16 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     `
                 }
             }
-            else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+            else if (typeof val === "string"){
+                if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
-                        <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
+                        <a href="object.html?id=${val}"><deer-view deer-id="${val}" deer-template="label"></deer-view></a>
                     </li>
                     `
                 }
-                else{
+                else {
                     //We know it is just a string of some kind and not the URI, so we can show this string.  
                     //TODO what should we do here?
                     name = `
@@ -283,34 +282,34 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     </li>
                     `
                 }
+            } else {
+                name+=`<li> no objects recorded </li>`
             }
             relatedObjectsByName += name
         })
         let objectsHTML = `
             <h4>Objects at Experience "${UTILS.getLabel(experienceData)}"</h4>
-            <p>Objects you add will appear here and can be removed, but not edited.</p>
             <ul id="objectsInExperience">
                 ${relatedObjectsByName}
             </ul>
         `
-        
+
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = ``
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
-        relatedPractices.items.forEach((val)=>{
+        relatedPractices.items.filter(v=>v.length>0).forEach((val) => {
             let name = ""
-            if(typeof val === "object"){
+            if (typeof val === "object") {
                 //See if the value is the URI we want
-                let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                let itemURI = UTILS.getSafeValue(val)
+                if (itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
-                else{
+                else {
                     //We know it is just a string of some kind.  Just use it.
                     //TODO what should we do here?
                     name = `
@@ -320,17 +319,16 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     `
                 }
             }
-            else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+            else if (typeof val === "string") {
+                if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
-                else{
+                else {
                     //We know it is just a string of some kind and not the URI, so we can show this string.  
                     //TODO what should we do here?
                     name = `
@@ -339,34 +337,34 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     </li>
                     `
                 }
+            } else {
+                name += `<li> no practices recorded </li>`
             }
             relatedPracticesByName += name
         })
         let practicesHTML = `
             <h4>Practices at Experience "${UTILS.getLabel(experienceData)}"</h4>
-            <p>Practices you add will appear here and can be removed, but not edited.</p>
             <ul id="practicesInExperience">
                 ${relatedPracticesByName}
             </ul>
         `
-        
+
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = ``
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
-        relatedSenses.items.forEach((val)=>{
+        relatedSenses.items.filter(v=>v.length>0).forEach((val) => {
             let name = ""
-            if(typeof val === "object"){
+            if (typeof val === "object") {
                 //See if the value is the URI we want
-                let itemURI = UTILS.getValue(val)
-                if(itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1){
+                let itemURI = UTILS.getSafeValue(val)
+                if (itemURI.indexOf("http://") > -1 || itemURI.indexOf("https://") > -1) {
                     name = `
                     <li>
                         <deer-view deer-id="${itemURI}" deer-template="mostUpToLabelHelper"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${itemURI}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
-                else{
+                else {
                     //We know it is just a string of some kind.  Just use it.
                     //TODO what should we do here?
                     name = `
@@ -376,17 +374,16 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     `
                 }
             }
-            else{
-                if(val.indexOf("http://") > -1 || val.indexOf("https://") > -1){
+            else if (typeof val === "string") {
+                if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
                     <li>
                         <deer-view deer-id="${val}" deer-template="label"></deer-view>
-                        <a class="tag is-rounded is-small text-error" onclick="LR.utils.disassociateObject(event, '${val}', '${experienceData["@id"]}')">Remove</a>
                     </li>
                     `
                 }
-                else{
+                else {
                     //We know it is just a string of some kind and not the URI, so we can show this string.  
                     //TODO what should we do here?
                     name = `
@@ -395,16 +392,17 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
                     </li>
                     `
                 }
+            } else {
+                name+=`<li> no senses recorded </li>`
             }
             relatedSensesByName += name
         })
         let sensesHTML = `
             <h4>Senses at Experience "${UTILS.getLabel(experienceData)}"</h4>
-            <p>Senses you add will appear here and can be removed, but not edited.</p>
             <ul id="sensesInExperience">
                 ${relatedSensesByName}
             </ul>
-        `     
+        `
         let researchersHTML = `<dt>LRDA Researchers Involved</dt><dd><ul id="researchersInExperience">${contributorsByName}</ul></dd>`
         let peopleHTML = `<dt>People Involved</dt><dd><ul id="peopleInExperience">${peopleByName}</ul></dd>`
         let placeHTML = `<dt>Location</dt><dd>${placeLabelHTML}</dd>`
@@ -415,7 +413,7 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
         tmpl += placeHTML + dateHTML + researchersHTML + peopleHTML + descriptionHTML + artifactsHTML
         return tmpl
     } catch (err) {
-        console.log("Could not build Event or ExperienceUpload template.")
+        console.log("Could not build Event-detail template.")
         console.error(err)
         return null
     }
@@ -429,23 +427,21 @@ DEER.TEMPLATES.Event = function(experienceData, options = {}) {
  * @param {type} obj
  * @param {type} options
  * @return {tmpl}
- */    
-DEER.TEMPLATES.list= function(obj, options={}) {
-    try{
+ */
+DEER.TEMPLATES.list = function (obj, options = {}) {
+    try {
         let tmpl = ``
-        if(options.list){
+        if (options.list) {
             tmpl += `<ul>`
-            obj[options.list].forEach((val,index)=>{
-                let currentKnownLabel = UTILS.getLabel(val,(val.type || val['@type'] || "")) //May not be the most recent.  
+            obj[options.list].forEach((val, index) => {
+                let currentKnownLabel = UTILS.getLabel(val, (val.type || val['@type'] || "")) //May not be the most recent.  
                 let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
-                let removeBtn = `<a href="#" class="tag is-rounded is-small text-error removeCollectionItem" title="Delete This Entry"
-                onclick="LR.utils.removeCollectionEntry(event, '${val["@id"]}', this.parentElement, '${UTILS.getLabel(obj)}')">&#x274C</a>`
-                let viewBtn = (val["@id"] && options.link) ? `<a target="_blank" class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-                tmpl+= val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}${removeBtn}</li>` : `<li>${name}</li>`
+                let viewBtn = (val["@id"] && options.link) ? `<a class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
+                tmpl += val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}</li>` : `<li>${name}</li>`
             })
             tmpl += `</ul>`
         }
-        else{
+        else {
             console.log("There are no items in this list to draw.")
             console.log(obj)
         }
@@ -458,12 +454,12 @@ DEER.TEMPLATES.list= function(obj, options={}) {
 
 }
 
-DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
-    try{
+DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
+    try {
         let key = options.key || "@id"
         let prop = obj[key] || "[ undefined ]"
         let label = options.label || UTILS.getLabel(obj, prop)
-        let isDescribed = obj["@type"]==="Researcher" || Object.keys(obj).some(i=>["description","geometry","email","fieldNotes"].includes(i))
+        let isDescribed = obj["@type"] === "Researcher" || Object.keys(obj).some(i => ["description", "geometry", "email", "fieldNotes"].includes(i))
         return isDescribed ? `${label}` : `<span class="needs-more" title="This entry may require more details">${label}</span>`
     } catch (err) {
         console.log("Could not build complete label template.")
@@ -480,7 +476,7 @@ DEER.TEMPLATES.completeLabel = function(obj, options = {}) {
  */
 DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
     try {
-        let at = options.additionalType ?  UTILS.getValue(options.additionalType) : obj.additionalType ?  UTILS.getValue(obj.additionalType) : ""
+        let at = options.additionalType ? UTILS.getSafeValue(options.additionalType) : obj.additionalType ? UTILS.getSafeValue(obj.additionalType) : ""
         return at
     } catch (err) {
         console.log("Could not build most up to date additional type template.")
@@ -529,21 +525,47 @@ DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
     }
 }
 
+DEER.TEMPLATES.object = function (obj, options = {}) {
+    try {
+        return `
+        <h2>${UTILS.getSafeValue(obj.name)}</h2>
+        <dl>
+        
+        <dt>Type:</dt>
+        <dd> ${UTILS.getSafeValue(obj.additionalType)}</dd>
+
+        <dt>Former Locations:</dt>
+        <dd> ${obj.FormerLocations && UTILS.getSafeValue(obj.FormerLocations).items.reduce((a,b,i)=>a+=`<deer-view deer-template="completeLabel" deer-id="${b}">${i}</deer-view>`,``)}</dd>
+
+        <dt>Former Uses:</dt>
+        <dd> ${obj.FormerUses && UTILS.getSafeValue(obj.FormerUses).items.join(", ")}</dd>
+        
+        <dt>Material:</dt>
+        <dd> ${UTILS.getSafeValue(obj.material)}</dd>
+        
+        <dt>Typical Use:</dt>
+        <dd> ${UTILS.getSafeValue(obj.purpose)}</dd>
+        
+        <dt>Depiction:</dt>
+        <dd> <a href="${UTILS.getSafeValue(obj.image)}">${UTILS.getSafeValue(obj.image) || "no record"}</a> </dd>
+        
+        <dt>Recordings:</dt>
+        <dd> <a href="${UTILS.getSafeValue(obj.associatedMedia)}">${UTILS.getSafeValue(obj.associatedMedia) || "no record"}</a> </dd>
+
+        </dl>
+        `
+    } catch (err) { 
+        return null 
+    }
+}
+
+
+DEER.URLS.QUERY = "http://tiny.rerum.io/app/query"
+
 let LR_primitives = ["additionalType"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
 let DEERprimitives = DEER.PRIMITIVES
 DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
-
-//Comment this out for dev-01 deploys
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    CREATE: "create",
-    UPDATE: "update",
-    QUERY: "query",
-    OVERWRITE: "overwrite",
-    DELETE: "delete",
-    SINCE: "http://store.rerum.io/v1/since"
-}
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
@@ -551,7 +573,7 @@ import { default as renderer, initializeDeerViews } from 'https://centerfordigit
 
 // Record is only needed for saving or updating items.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
+//import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
 
 // fire up the element detection as needed
 /**
@@ -560,4 +582,5 @@ import { default as record, initializeDeerForms } from 'https://centerfordigital
  * elements in the DOM to do things like pre-filling or pre-select values, which much exist in the DOM for such interaction.
  * We seek to streamline the logic around these threads in the near future.  Make sure these remain treated as asyncronous.
  */
-initializeDeerViews(DEER).then(() => initializeDeerForms(DEER))
+initializeDeerViews(DEER)
+//.then(() => initializeDeerForms(DEER))
