@@ -21,7 +21,7 @@ LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 //For prd-01
 LR.URLS = {
     BASE_ID: "http://store.rerum.io/v1",
-    QUERY: "query",
+    QUERY: "http://tiny.rerum.io/app/query",
     SINCE: "http://store.rerum.io/v1/since"
 }
 
