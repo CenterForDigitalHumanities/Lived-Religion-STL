@@ -202,7 +202,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = `<li> ${val||" no constributors recorded "} </li>`
+                    name = `<li> ${val||" no contributors recorded "} </li>`
                 }
             }
             contributorsByName += name
