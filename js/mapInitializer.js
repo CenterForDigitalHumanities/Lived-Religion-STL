@@ -15,7 +15,7 @@ DEER.URLS = {
     BASE_ID: "http://store.rerum.io/v1",
     CREATE: "create",
     UPDATE: "update",
-    QUERY: "query",
+    QUERY: "http://tiny.rerum.io/app/query",
     OVERWRITE: "overwrite",
     DELETE: "delete",
     SINCE: "http://store.rerum.io/v1/since"
