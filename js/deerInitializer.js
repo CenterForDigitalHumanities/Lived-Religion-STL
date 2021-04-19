@@ -58,7 +58,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
 
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let contributorsByName = ``
-        contributors.items.filter(v=>v.length>0).forEach((val) => {
+        contributors.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 let itemURI = UTILS.getSafeValue(val)
@@ -80,7 +80,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = `<li> ${val||" no contributors recorded "} </li>`
+                    name = `<li> ${val || " no contributors recorded "} </li>`
                 }
             }
             contributorsByName += name
@@ -88,7 +88,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
 
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let peopleByName = ``
-        people.items.filter(v=>v.length>0).forEach((val) => {
+        people.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 let itemURI = UTILS.getSafeValue(val)
@@ -102,7 +102,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     name = `<li> ${itemURI} </li>`
                 }
             }
-            else if (typeof val === "string"){
+            else if (typeof val === "string") {
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
@@ -120,7 +120,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = ``
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
-        relatedObjects.items.filter(v=>v.length>0).forEach((val) => {
+        relatedObjects.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 //See if the value is the URI we want
@@ -142,7 +142,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             }
-            else if (typeof val === "string"){
+            else if (typeof val === "string") {
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
@@ -161,7 +161,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             } else {
-                name+=`<li> no objects recorded </li>`
+                name += `<li> no objects recorded </li>`
             }
             relatedObjectsByName += name
         })
@@ -175,7 +175,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = ``
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
-        relatedPractices.items.filter(v=>v.length>0).forEach((val) => {
+        relatedPractices.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 //See if the value is the URI we want
@@ -230,7 +230,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = ``
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
-        relatedSenses.items.filter(v=>v.length>0).forEach((val) => {
+        relatedSenses.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 //See if the value is the URI we want
@@ -271,7 +271,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             } else {
-                name+=`<li> no senses recorded </li>`
+                name += `<li> no senses recorded </li>`
             }
             relatedSensesByName += name
         })
@@ -413,7 +413,7 @@ DEER.TEMPLATES.object = function (obj, options = {}) {
         <dd> ${UTILS.getSafeValue(obj.additionalType)}</dd>
 
         <dt>Former Locations:</dt>
-        <dd> ${obj.FormerLocations && UTILS.getSafeValue(obj.FormerLocations).items.reduce((a,b,i)=>a+=`<deer-view deer-template="completeLabel" deer-id="${b}">${i}</deer-view>`,``)}</dd>
+        <dd> ${obj.FormerLocations && UTILS.getSafeValue(obj.FormerLocations).items.reduce((a, b, i) => a += `<deer-view deer-template="completeLabel" deer-id="${b}">${i}</deer-view>`, ``)}</dd>
 
         <dt>Former Uses:</dt>
         <dd> ${obj.FormerUses && UTILS.getSafeValue(obj.FormerUses).items.join(", ")}</dd>
@@ -432,8 +432,8 @@ DEER.TEMPLATES.object = function (obj, options = {}) {
 
         </dl>
         `
-    } catch (err) { 
-        return null 
+    } catch (err) {
+        return null
     }
 }
 

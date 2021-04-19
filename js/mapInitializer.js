@@ -9,7 +9,7 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
-    
+
 DEER.URLS = {
     BASE_ID: "http://store.rerum.io/v1",
     QUERY: "http://tiny.rerum.io/app/query",
@@ -20,63 +20,63 @@ let MAP = {}
 
 MAP.mymap = {}
 
-MAP.init =  async function(){
+MAP.init = async function () {
     let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
     let latlong = [38.6360699, -90.2348349] //default starting coords
     document.getElementById("leafLat").oninput = MAP.updateGeometry
     document.getElementById("leafLong").oninput = MAP.updateGeometry
-    
-    let expandedEntities = entitiesInCollection.map(async function(locationID){
-        return  await UTILS.expand({"@id":locationID})
-        .then(expandedLocation => {
-            let targetProps = {"targetID": UTILS.getValue(expandedLocation["@id"]), "label": UTILS.getLabel(expandedLocation), "description":UTILS.getValue(expandedLocation.description), "madeByApp" : "Lived_Religion"}
-            return {"@id":expandedLocation.geometry.source.citationSource, "properties":targetProps, "type":"Feature", "geometry":expandedLocation.geometry.value} 
-        })
+
+    let expandedEntities = entitiesInCollection.map(async function (locationID) {
+        return await UTILS.expand({ "@id": locationID })
+            .then(expandedLocation => {
+                let targetProps = { "targetID": UTILS.getValue(expandedLocation["@id"]), "label": UTILS.getLabel(expandedLocation), "description": UTILS.getValue(expandedLocation.description), "madeByApp": "Lived_Religion" }
+                return { "@id": expandedLocation.geometry.source.citationSource, "properties": targetProps, "type": "Feature", "geometry": expandedLocation.geometry.value }
+            })
+            .catch(err => {
+                console.error(err)
+                return {}
+            })
+    })
+    Promise.all(expandedEntities).then(LR_geos => {
+        return LR_geos.filter(geo => { return (geo.hasOwnProperty("geometry") && Object.keys(geo.geometry).length > 0) })
+    })
+        .then(filtered_geos => { MAP.initializeMap(latlong, filtered_geos) })
         .catch(err => {
             console.error(err)
-            return {}
+            alert("Could not gather coordinate data.  Refresh to Try Again.")
         })
-    })     
-    Promise.all(expandedEntities).then(LR_geos => {
-        return LR_geos.filter(geo => {return (geo.hasOwnProperty("geometry") && Object.keys(geo.geometry).length > 0)})        
-    })
-    .then(filtered_geos => {MAP.initializeMap(latlong, filtered_geos)})
-    .catch(err => {
-        console.error(err)
-        alert("Could not gather coordinate data.  Refresh to Try Again.")
-    })
 }
 
-MAP.initializeMap = async function(coords, geoMarkers){
-    MAP.mymap = L.map('leafletInstanceContainer')   
+MAP.initializeMap = async function (coords, geoMarkers) {
+    MAP.mymap = L.map('leafletInstanceContainer')
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 100,
         id: 'mapbox.satellite', //mapbox.streets
         accessToken: 'pk.eyJ1IjoidGhlaGFiZXMiLCJhIjoiY2pyaTdmNGUzMzQwdDQzcGRwd21ieHF3NCJ9.SSflgKbI8tLQOo2DuzEgRQ'
     }).addTo(MAP.mymap);
-    MAP.mymap.setView(coords,9);
+    MAP.mymap.setView(coords, 9);
 
     L.geoJSON(geoMarkers, {
         pointToLayer: function (feature, latlng) {
             let appColor = "#336699"
             let creating_app = feature.properties.madeByApp ? feature.properties.madeByApp : "Unknown"
-            switch(creating_app){
+            switch (creating_app) {
                 case "MapDemo":
                     appColor = "#336699"
-                break
+                    break
                 case "Lived_Religion":
                     appColor = "#00cc00"
-                break
+                    break
                 case "T-PEN":
                     appColor = "#ff9900"
-                break
+                    break
                 case "Mirador":
                     appColor = "#ff3333"
-                break
+                    break
                 case "IIIF_Coordinates_Annotator":
                     appColor = "#800060"
-                break
+                    break
                 default:
                     appColor = "red"
             }
@@ -93,7 +93,7 @@ MAP.initializeMap = async function(coords, geoMarkers){
     }).addTo(MAP.mymap)
     leafletInstanceContainer.style.backgroundImage = "none"
     loadingMessage.classList.add("is-hidden")
-    
+
     //We cannot initalize another map, and there is no Leaflet getter for a map.  We need to expose this map to mapping.js.  mapping.js uses MAPPER
     //Since this is called after MAPINTERACTION and MAP have both been initialized thanks to the deer-loaded listener, we can do this.
     //@FIXME is this the right way to do this?
@@ -106,20 +106,20 @@ MAP.pointEachFeature = function (feature, layer) {
     layer.isHiding = false
     let popupContent = ""
     if (feature.properties) {
-        if(feature.properties.label) {
+        if (feature.properties.label) {
             popupContent += `<div class="featureInfo"><label>Target Label:</label>${feature.properties.label}</div>`
         }
-        if(feature.properties.targetID || feature.properties["@id"]){
+        if (feature.properties.targetID || feature.properties["@id"]) {
             let targetURI = feature.properties["@id"] ? feature.properties["@id"] : feature.properties.targetID ? feature.properties.targetID : ""
             popupContent += `<div class="featureInfo"><label> Target URI:</label><a target='_blank' href='${targetURI}'>See Target Data</a></div>`
         }
-        if(feature.properties.description) {
+        if (feature.properties.description) {
             popupContent += `<div class="featureInfo"><label> Target Description:</label>${feature.properties.description}</div>`
         }
-        if(feature.properties.madeByApp) {
+        if (feature.properties.madeByApp) {
             popupContent += `<div class="featureInfo"><label>Annotation Generated By</label>${feature.properties.madeByApp}</div>`
         }
-        if(feature["@id"]) {
+        if (feature["@id"]) {
             popupContent += `<div class="featureInfo"><label>Annotation URI:</label><a target='_blank' href='${feature["@id"]}'>See Annotation Data</a></div>`
         }
     }
@@ -132,10 +132,10 @@ MAP.pointEachFeature = function (feature, layer) {
 * @returns {undefined}
 */
 addEventListener("deer-loaded", event => {
-   if (event.target.getAttribute("id") === "locations") {
-      let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
-      MAP.init(entitiesInCollection)
-   }
+    if (event.target.getAttribute("id") === "locations") {
+        let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
+        MAP.init(entitiesInCollection)
+    }
 }, false)
 
 // fire up the element detection as needed
