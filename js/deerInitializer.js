@@ -1,7 +1,7 @@
 /**
  * @module DEER Data Encoding and Exhibition for RERUM (DEER)
  * @author Patrick Cuba <cubap@slu.edu>
-
+ 
  * This code should serve as a basis for developers wishing to
  * use TinyThings as a RERUM proxy for an application for data entry,
  * especially within the Eventities model.
@@ -15,129 +15,7 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 UTILS.getSafeValue = (property, alsoPeek, asType) => property ? UTILS.getValue(property, alsoPeek, asType) : ""
 
-/**
- * Represent a collection as a <select> HTML dropdown.  
- * Include the ability to quickly add an item to the collection, which will then be selected.
- * @param {type} obj
- * @param {type} options
- * @return {tmpl}
- */
-DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
-    try {
-        let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let type = ""
-        if (whichCollection) {
-            let check = whichCollection.replace("Test", "")
-            switch (check) {
-                case "LivedReligionLocations":
-                    type = "Place"
-                    break
-                case "LivedReligionObjects":
-                    type = "Thing"
-                    break
-                case "LivedReligionExperiences":
-                    type = "Event"
-                    break
-                case "LivedReligionResearchers":
-                    type = "Researcher"
-                    break
-                case "LivedReligionPeople":
-                    type = "Person"
-                    break
-                default:
-                    console.error("This is an unknown collection: " + whichCollection + ".")
-                    return null
-            }
-        }
-        else {
-            console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
-            console.log(obj)
-            return null
-        }
-        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div class="card quickAddEntity bg-light is-hidden">
-            <label>Supply a name or label for this entity</label>
-            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
-            <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', true, '${type}')">Add</a>
-        </div>`
-        let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
-        tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allPlacesInCollection = obj.itemListElement ? UTILS.getSafeValue(obj.itemListElement) : []
-        for (let place of allPlacesInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
-        }
-        tmpl += `</select>`
-        return tmpl
-    } catch (err) {
-        console.log("Could not build collection dropdown template.")
-        console.error(err)
-        return null
-    }
-}
-
-/**
- * Represent a collection as a <select multiple> HTML multi-select.  
- * Include the ability to quickly add an item to the collection, which will then be selected.
- * @param {type} obj
- * @param {type} options
- * @return {tmpl}
- */
-DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
-    try {
-        let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let type = ""
-        if (whichCollection) {
-            let check = whichCollection.replace("Test", "")
-            switch (check) {
-                case "LivedReligionLocations":
-                    type = "Place"
-                    break
-                case "LivedReligionObjects":
-                    type = "Thing"
-                    break
-                case "LivedReligionExperiences":
-                    type = "Event"
-                    break
-                case "LivedReligionResearchers":
-                    type = "Researcher"
-                    break
-                case "LivedReligionPeople":
-                    type = "Person"
-                    break
-                default:
-                    console.error("This is an unknown collection: " + whichCollection + ".")
-                    return null
-            }
-        }
-        else {
-            console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
-            console.log(obj)
-            return null
-        }
-        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div class="card quickAddEntity bg-light is-hidden">
-            <label>Supply a name or label for this entity</label>
-            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
-            <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
-        </div>`
-        let selected = `<div class="selectedEntities"></div>`
-        let allLocationsInCollection = obj.itemListElement ? UTILS.getSafeValue(obj.itemListElement) : []
-        let tmpl = `${quickAddTmpl}`
-        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
-            <optgroup label="Choose Below"> `
-        for (let loc of allLocationsInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
-        }
-        tmpl += `</optgroup></select>${selected}`
-        return tmpl
-    } catch (err) {
-        console.log("Could not build collection multi select template.")
-        console.error(err)
-        return null
-    }
-}
+DEER.URLS.QUERY = "http://tiny.rerum.io/app/query"
 
 DEER.TEMPLATES.Event = function (experienceData, options = {}) {
     try {
@@ -559,8 +437,6 @@ DEER.TEMPLATES.object = function (obj, options = {}) {
     }
 }
 
-
-DEER.URLS.QUERY = "http://tiny.rerum.io/app/query"
 
 let LR_primitives = ["additionalType"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
