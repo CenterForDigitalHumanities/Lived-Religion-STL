@@ -132,7 +132,7 @@ MAP.pointEachFeature = function (feature, layer) {
 }
 
 /**
-* Determine what to do with the items in the Lived Religion Locations collection based on a users roles
+* Determine what to do with the items in the Lived Religion Locations collection
 * @param {type} event
 * @returns {undefined}
 */
