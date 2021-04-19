@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-MAPINTERACTION = {}
+const MAPINTERACTION = {}
 
 MAPINTERACTION.goToCoords = function(event){
     if(!MAPINTERACTION.mymap){
@@ -25,35 +25,22 @@ MAPINTERACTION.filterMarkers = async function(event){
     }
     let app = event.target.getAttribute("app")
     MAPINTERACTION.mymap.eachLayer(function(layer) {
-        let skipCheck = false
         if ( layer.hasMyPoints ) {
             if(layer.feature.properties && layer.feature.properties.madeByApp && layer.feature.properties.madeByApp === app){
                 if(layer.isHiding){
                     layer.isHiding = false
                     let creating_app = layer.feature.properties.madeByApp ? layer.feature.properties.madeByApp : "Unknown"
-                    let appColor = ""
-                    switch(creating_app){
-                        case "MapDemo":
-                            appColor = "#336699"
-                        break
-                        case "Lived_Religion":
-                            appColor = "#00cc00"
-                        break
-                        case "T-PEN":
-                            appColor = "#ff9900"
-                        break
-                        case "Mirador":
-                            appColor = "#ff3333"
-                        break
-                        case "IIIF_Coordinates_Annotator":
-                            appColor = "#800060"
-                        break
-                        default:
-                            appColor = "#b5a4a3"
-                    }
+                    const appMap = new Map([
+                        ["MapDemo","#336699"],
+                        ["Lived_Religion","#00cc00"],
+                        ["T-PEN","#ff9900"],
+                        ["Mirador","#ff3333"],
+                        ["IIIF_Coordinates_Annotator","#800060"],
+                        ["default","#b5a4a3"]
+                    ])
                     layer.setStyle({
                         color: "#000",
-                        fillColor : appColor
+                        fillColor : appMap.get(creating_app) ?? appMap.get("default")
                     })
                 }
                 else{

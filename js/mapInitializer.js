@@ -10,15 +10,9 @@ import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/d
 
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
 
-DEER.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    QUERY: "http://tiny.rerum.io/app/query",
-    SINCE: "http://store.rerum.io/v1/since"
+let MAP = {
+    mymap: {}
 }
-
-let MAP = {}
-
-MAP.mymap = {}
 
 MAP.init = async function () {
     let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
@@ -59,7 +53,7 @@ MAP.initializeMap = async function (coords, geoMarkers) {
 
     L.geoJSON(geoMarkers, {
         pointToLayer: function (feature, latlng) {
-            let appColor = "#336699"
+            let appColor
             let creating_app = feature.properties.madeByApp ? feature.properties.madeByApp : "Unknown"
             switch (creating_app) {
                 case "MapDemo":

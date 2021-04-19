@@ -346,7 +346,6 @@ DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
     }
 }
 
-
 /**
  * Ensure the most up to date additionalType annotation is gathered.  Often used when rendering collection items.
  * Using a template ensures that expand(obj) has happened, so we have all up to date annotations in obj.
@@ -358,46 +357,6 @@ DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
         return at
     } catch (err) {
         console.log("Could not build most up to date additional type template.")
-        console.error(err)
-        return null
-    }
-}
-
-/**
- * What a practiced is named is based off of its AdditionalType.  This is a template for the dropdowns and functionality to apply a "name"
- * based off of the AdditionalType selection
- * @param {Object} obj some obj  containing some label annotating it.
- */
-DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
-    try {
-        let tmpl = `<select class="additionalTypeDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].text">`
-        tmpl += `
-            <option disabled selected value> Required </option>
-            <option value="None">None Noted</option>
-            <option value="EatAction">Eating</option>
-            <option value="DrinkAction">Drinking</option>
-            <option value="PlayAction">Playing</option>
-            <option value="ClotheAction">Clothing</option>
-            <option value="SingAction">Singing</option>
-            <option value="MoveAction">Moving</option>
-            <option value="SitAction">Sitting</option>
-            <option value="StandAction">Standing</option>
-            <option value="KneelAction">Kneeling</option>
-            <option value="TravelAction">Traveling</option>
-            <option value="DanceAction">Dancing</option>
-            <option value="CookAction">Cooking</option>
-            <option value="WorkAction">Working</option>
-            <option value="ListenAction">Listening</option>
-            <option value="WatchAction">Watching</option>
-            <option value="WriteAction">Writing</option>
-            <option value="TradeAction">Trading</option>
-            <option value="GiveAction">Donating</option>
-            <option value="Other">Other</option>
-        `
-        tmpl += "</select>"
-        return tmpl
-    } catch (err) {
-        console.log("Could not build practice name helper template.")
         console.error(err)
         return null
     }
@@ -437,7 +396,6 @@ DEER.TEMPLATES.object = function (obj, options = {}) {
     }
 }
 
-
 let LR_primitives = ["additionalType"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
 let DEERprimitives = DEER.PRIMITIVES
@@ -447,16 +405,5 @@ DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
 
-// Record is only needed for saving or updating items.
-// CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-//import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
-
 // fire up the element detection as needed
-/**
- * Note that VIEWS can be building blocks of FORMS.  VIEWS may also be the FORM in its entirety.
- * It follows that VIEWS must finish populating to the DOM before initializing forms which interact with the
- * elements in the DOM to do things like pre-filling or pre-select values, which much exist in the DOM for such interaction.
- * We seek to streamline the logic around these threads in the near future.  Make sure these remain treated as asyncronous.
- */
 initializeDeerViews(DEER)
-//.then(() => initializeDeerForms(DEER))

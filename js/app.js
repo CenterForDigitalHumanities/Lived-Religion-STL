@@ -7,12 +7,11 @@
 const LR = {}
 LR.VERSION = "1.0.0"
 LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
-LR.EXPERIENCE_COLLECTION = "http://store.rerum.io/v1/id/LRDAList"
+LR.EXPERIENCE_COLLECTION = "http://store.rerum.io/v1/id/LRDAList" //TODO: DEER-LR #208
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
 LR.URLS = {
     BASE_ID: "http://store.rerum.io/v1",
-    QUERY: "http://tiny.rerum.io/app/query",
-    SINCE: "http://store.rerum.io/v1/since"
+    QUERY: "http://tiny.rerum.io/app/query"
 }
 
 LR.ui = {}
@@ -126,18 +125,5 @@ LR.utils.populateCoordinates = function (object, form) {
         //There is are no coordinates in this geometry object, or geometry was missing
         console.warn("The coordinates for this object are not stored correctly.  Investigate around ")
         console.log(object)
-    }
-}
-
-/**
- * Helper to populate the widget tracking field notes with the value gathered by expand() functionality.
- * @param {type} experienceLabel
- * @param {type} fieldNotesFromData
- * @return {undefined}
- */
-LR.utils.prePopulateFieldNotes = function (fieldNotesFromData) {
-    if (fieldNotesFromData !== undefined) {
-        let notes_str = (typeof fieldNotesFromData === "object" && fieldNotesFromData.hasOwnProperty("value")) ? fieldNotesFromData.value : fieldNotesFromData
-        document.getElementById("fieldNotesEntry").value = notes_str
     }
 }
