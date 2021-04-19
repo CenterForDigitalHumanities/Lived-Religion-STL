@@ -15,7 +15,10 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 UTILS.getSafeValue = (property, alsoPeek, asType) => property ? UTILS.getValue(property, alsoPeek, asType) : ""
 
-DEER.URLS.QUERY = "http://tiny.rerum.io/app/query"
+DEER.URLS = {
+    QUERY: "http://tiny.rerum.io/app/query",
+    BASE_ID: "http://store.rerum.io/v1"
+}
 
 DEER.TEMPLATES.Event = function (experienceData, options = {}) {
     try {

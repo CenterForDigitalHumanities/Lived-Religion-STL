@@ -9,11 +9,6 @@ LR.VERSION = "1.0.0"
 LR.APPAGENT = "http://store.rerum.io/v1/id/5da8c165d5de6ba6e2028474"
 LR.EXPERIENCE_COLLECTION = "http://store.rerum.io/v1/id/LRDAList" //TODO: DEER-LR #208
 LR.CONTEXT = "http://lived-religion.rerum.io/deer-lr/vocab/context.json"
-LR.URLS = {
-    BASE_ID: "http://store.rerum.io/v1",
-    QUERY: "http://tiny.rerum.io/app/query"
-}
-
 LR.ui = {}
 LR.utils = {}
 
@@ -42,7 +37,6 @@ LR.ui.toggleAreas = function (event) {
  */
 LR.ui.toggleAreaHideOthers = function (event) {
     let area = event.target.getAttribute("area")
-    let elems = document.querySelectorAll("div[tog='" + area + "']")
     let all = document.querySelectorAll("div[tog]")
     for (let elem of all) {
         if (elem.getAttribute("tog") && elem.getAttribute("tog") === area) {
