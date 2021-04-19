@@ -14,12 +14,16 @@
 
 <body>
     <lr-nav></lr-nav>
+
     <div class="container">
         <deer-view deer-id="" id="details" deer-template="object"></deer-view>
     </div>
+    
     <div class="pageShade is-hidden"></div>
+
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
+
     <script>
         const uri = new URLSearchParams(window.location.search).get('id')
         if (uri) { details.setAttribute("deer-id", uri) }

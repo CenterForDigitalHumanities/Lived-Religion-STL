@@ -23,69 +23,54 @@ and open the template in the editor.
         .color1 {
             background-color: #336699;
         }
-
         .color2 {
             background-color: #00cc00;
         }
-
         .color3 {
             background-color: #ff9900;
         }
-
         .color4 {
             background-color: #ff3333;
         }
-
         .color5 {
             background-color: #800060;
         }
-
         .color6 {
             background-color: #b5a4a3;
         }
-
         .tag {
             color: white;
         }
-
         .grouped input {
             height: 1.5em;
             width: 5em !important;
         }
-
         .featureInfo {
             margin: 4px 0px;
             font-family: monospace;
         }
-
         .featureInfo label {
             margin-right: 6px;
             font-family: sans-serif;
         }
-
         .featureCompliance {
             text-align: center;
         }
-
         #howTo {
             margin-top: 2em;
             font-size: 10pt;
         }
-
         input[app] {
             margin: 2px 0px 5px 0px;
         }
-
         @keyframes color {
             0% {
                 background-color: white;
             }
-
             50% {
                 background-color: darkgrey;
             }
-
-            100 {
+            100% {
                 background-color: white;
             }
         }
@@ -94,6 +79,7 @@ and open the template in the editor.
 
 <body>
     <lr-nav></lr-nav>
+    
     <div class="container">
         <p id='howTo'>
             View the map below for rendered coordinate information. Pan and zoom are supported. Supplying direct
@@ -121,16 +107,18 @@ and open the template in the editor.
             </footer>
         </div>
     </div>
+    
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
+    
+    <!-- helper DOM -->
     <div id="locations" deer-collection="LivedReligionLocations" class="deer-view col is-hidden"></div>
 </body>
 <script>
 
     /**
-     * Use Shift + Z to do the zoom out to xsee dots across the globe.
+     * Use Shift + Z to do the zoom out to see dots across the globe.
      */
-
     document.addEventListener("keydown", function (event) {
         let key;
         let isShift;
