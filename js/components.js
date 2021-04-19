@@ -25,7 +25,7 @@ class LrNav extends HTMLElement {
         this.innerHTML = `<div class="nav-left">
             <a class="brand" href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Meuble_h%C3%A9raldique_Fleur_de_lis.svg"></a>
             <div class="tabs">
-                <a href="all_experiences.html">Experiences</a>
+                <a href="experiences.html">Experiences</a>
                 <a href="map.html">Map View</a>
             </div>
         </div>`
@@ -37,7 +37,7 @@ customElements.define("lr-nav", LrNav)
 class LrGlobalFeedback extends HTMLElement {
     constructor() {
         super()
-            this.innerHTML = `
+        this.innerHTML = `
             <div id="globalFeedback" class="bg-success text-white card"> Welcome! </div>
         `
     }
