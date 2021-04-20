@@ -1,7 +1,7 @@
 /**
  * @module DEER Data Encoding and Exhibition for RERUM (DEER)
  * @author Patrick Cuba <cubap@slu.edu>
-
+ 
  * This code should serve as a basis for developers wishing to
  * use TinyThings as a RERUM proxy for an application for data entry,
  * especially within the Eventities model.
@@ -15,128 +15,9 @@ import { default as DEER } from 'https://centerfordigitalhumanities.github.io/de
 import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
 UTILS.getSafeValue = (property, alsoPeek, asType) => property ? UTILS.getValue(property, alsoPeek, asType) : ""
 
-/**
- * Represent a collection as a <select> HTML dropdown.  
- * Include the ability to quickly add an item to the collection, which will then be selected.
- * @param {type} obj
- * @param {type} options
- * @return {tmpl}
- */
-DEER.TEMPLATES.itemsAsDropdown = function (obj, options = {}) {
-    try {
-        let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let type = ""
-        if (whichCollection) {
-            let check = whichCollection.replace("Test", "")
-            switch (check) {
-                case "LivedReligionLocations":
-                    type = "Place"
-                    break
-                case "LivedReligionObjects":
-                    type = "Thing"
-                    break
-                case "LivedReligionExperiences":
-                    type = "Event"
-                    break
-                case "LivedReligionResearchers":
-                    type = "Researcher"
-                    break
-                case "LivedReligionPeople":
-                    type = "Person"
-                    break
-                default:
-                    console.error("This is an unknown collection: " + whichCollection + ".")
-                    return null
-            }
-        }
-        else {
-            console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
-            console.log(obj)
-            return null
-        }
-        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div class="card quickAddEntity bg-light is-hidden">
-            <label>Supply a name or label for this entity</label>
-            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
-            <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', true, '${type}')">Add</a>
-        </div>`
-        let tmpl = `${quickAddTmpl}<select class="locDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].value">`
-        tmpl += `<option disabled selected value> Not Supplied </option>`
-        let allPlacesInCollection = obj.itemListElement ? UTILS.getSafeValue(obj.itemListElement) : []
-        for (let place of allPlacesInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${place['@id']}" value="${place['@id']}">${UTILS.getLabel(place)}</option>`
-        }
-        tmpl += `</select>`
-        return tmpl
-    } catch (err) {
-        console.log("Could not build collection dropdown template.")
-        console.error(err)
-        return null
-    }
-}
-
-/**
- * Represent a collection as a <select multiple> HTML multi-select.  
- * Include the ability to quickly add an item to the collection, which will then be selected.
- * @param {type} obj
- * @param {type} options
- * @return {tmpl}
- */
-DEER.TEMPLATES.itemsAsMultiSelect = function (obj, options = {}) {
-    try {
-        let whichCollection = UTILS.getLabel(obj) ? UTILS.getLabel(obj) : ""
-        let type = ""
-        if (whichCollection) {
-            let check = whichCollection.replace("Test", "")
-            switch (check) {
-                case "LivedReligionLocations":
-                    type = "Place"
-                    break
-                case "LivedReligionObjects":
-                    type = "Thing"
-                    break
-                case "LivedReligionExperiences":
-                    type = "Event"
-                    break
-                case "LivedReligionResearchers":
-                    type = "Researcher"
-                    break
-                case "LivedReligionPeople":
-                    type = "Person"
-                    break
-                default:
-                    console.error("This is an unknown collection: " + whichCollection + ".")
-                    return null
-            }
-        }
-        else {
-            console.error("Could not find collection label on provided object.  This is an unknown collection.  See object below.")
-            console.log(obj)
-            return null
-        }
-        let quickAddTmpl = `<a title="Click here to add a new entity by name to this collection." class="quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.nextElementSibling)">&#x2b;</a>
-        <div class="card quickAddEntity bg-light is-hidden">
-            <label>Supply a name or label for this entity</label>
-            <a class="closeQuickAdd quick tag bg-primary text-white is-small pull-right" onclick="LR.ui.toggleEntityAddition(event, this.parentElement)"> &#8722; </a>
-            <input class="" type="text" />
-            <a class="tag bg-primary text-white" onclick="LR.utils.quicklyAddToCollection(event, '${whichCollection}', false, '${type}')">Add</a>
-        </div>`
-        let selected = `<div class="selectedEntities"></div>`
-        let allLocationsInCollection = obj.itemListElement ? UTILS.getSafeValue(obj.itemListElement) : []
-        let tmpl = `${quickAddTmpl}`
-        tmpl += `<select multiple oninput="LR.utils.handleMultiSelect(event,true)">
-            <optgroup label="Choose Below"> `
-        for (let loc of allLocationsInCollection) {
-            tmpl += `<option class="deer-view" deer-template="label" deer-id="${loc['@id']}" value="${loc['@id']}">${UTILS.getLabel(loc)}</option>`
-        }
-        tmpl += `</optgroup></select>${selected}`
-        return tmpl
-    } catch (err) {
-        console.log("Could not build collection multi select template.")
-        console.error(err)
-        return null
-    }
+DEER.URLS = {
+    QUERY: "http://tiny.rerum.io/app/query",
+    BASE_ID: "http://store.rerum.io/v1"
 }
 
 DEER.TEMPLATES.Event = function (experienceData, options = {}) {
@@ -180,7 +61,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
 
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let contributorsByName = ``
-        contributors.items.filter(v=>v.length>0).forEach((val) => {
+        contributors.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 let itemURI = UTILS.getSafeValue(val)
@@ -202,7 +83,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                 else {
                     //We know it is just a string of some kind, probably the label they want to display, so just use it.
                     //TODO what should we do here?
-                    name = `<li> ${val||" no contributors recorded "} </li>`
+                    name = `<li> ${val || " no contributors recorded "} </li>`
                 }
             }
             contributorsByName += name
@@ -210,7 +91,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
 
         //experienceData.contributors is probably a Set or List of URIs and we want their labels
         let peopleByName = ``
-        people.items.filter(v=>v.length>0).forEach((val) => {
+        people.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 let itemURI = UTILS.getSafeValue(val)
@@ -224,7 +105,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     name = `<li> ${itemURI} </li>`
                 }
             }
-            else if (typeof val === "string"){
+            else if (typeof val === "string") {
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //item is a string and it is a URI value, as expected.
                     name = `<li><deer-view deer-id="${val}" deer-template="label"></deer-view></li>`
@@ -242,7 +123,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedObjects, an array of URIs
         let relatedObjectsByName = ``
         //experienceData.relatedObjects is probably a Set or List of String URIs, we want their label
-        relatedObjects.items.filter(v=>v.length>0).forEach((val) => {
+        relatedObjects.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 //See if the value is the URI we want
@@ -264,7 +145,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             }
-            else if (typeof val === "string"){
+            else if (typeof val === "string") {
                 if (val.indexOf("http://") > -1 || val.indexOf("https://") > -1) {
                     //We expect this is item entry is the URI we were looking for
                     name = `
@@ -283,7 +164,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             } else {
-                name+=`<li> no objects recorded </li>`
+                name += `<li> no objects recorded </li>`
             }
             relatedObjectsByName += name
         })
@@ -297,7 +178,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedPractices, an array of URIs
         let relatedPracticesByName = ``
         //experienceData.relatedPractices is probably a Set or List of String URIs, we want their label
-        relatedPractices.items.filter(v=>v.length>0).forEach((val) => {
+        relatedPractices.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 //See if the value is the URI we want
@@ -352,7 +233,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
         //Gather relatedSenses, an array of URIs
         let relatedSensesByName = ``
         //experienceData.relatedSenses is probably a Set or List of String URIs, we want their label
-        relatedSenses.items.filter(v=>v.length>0).forEach((val) => {
+        relatedSenses.items.filter(v => v.length > 0).forEach((val) => {
             let name = ""
             if (typeof val === "object") {
                 //See if the value is the URI we want
@@ -393,7 +274,7 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
                     `
                 }
             } else {
-                name+=`<li> no senses recorded </li>`
+                name += `<li> no senses recorded </li>`
             }
             relatedSensesByName += name
         })
@@ -468,7 +349,6 @@ DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
     }
 }
 
-
 /**
  * Ensure the most up to date additionalType annotation is gathered.  Often used when rendering collection items.
  * Using a template ensures that expand(obj) has happened, so we have all up to date annotations in obj.
@@ -485,46 +365,6 @@ DEER.TEMPLATES.mostUpToDateAdditionalTypeHelper = function (obj, options = {}) {
     }
 }
 
-/**
- * What a practiced is named is based off of its AdditionalType.  This is a template for the dropdowns and functionality to apply a "name"
- * based off of the AdditionalType selection
- * @param {Object} obj some obj  containing some label annotating it.
- */
-DEER.TEMPLATES.practiceNameHelper = function (obj, options = {}) {
-    try {
-        let tmpl = `<select class="additionalTypeDropdown" oninput="this.parentElement.previousElementSibling.value=this.options[this.selectedIndex].text">`
-        tmpl += `
-            <option disabled selected value> Required </option>
-            <option value="None">None Noted</option>
-            <option value="EatAction">Eating</option>
-            <option value="DrinkAction">Drinking</option>
-            <option value="PlayAction">Playing</option>
-            <option value="ClotheAction">Clothing</option>
-            <option value="SingAction">Singing</option>
-            <option value="MoveAction">Moving</option>
-            <option value="SitAction">Sitting</option>
-            <option value="StandAction">Standing</option>
-            <option value="KneelAction">Kneeling</option>
-            <option value="TravelAction">Traveling</option>
-            <option value="DanceAction">Dancing</option>
-            <option value="CookAction">Cooking</option>
-            <option value="WorkAction">Working</option>
-            <option value="ListenAction">Listening</option>
-            <option value="WatchAction">Watching</option>
-            <option value="WriteAction">Writing</option>
-            <option value="TradeAction">Trading</option>
-            <option value="GiveAction">Donating</option>
-            <option value="Other">Other</option>
-        `
-        tmpl += "</select>"
-        return tmpl
-    } catch (err) {
-        console.log("Could not build practice name helper template.")
-        console.error(err)
-        return null
-    }
-}
-
 DEER.TEMPLATES.object = function (obj, options = {}) {
     try {
         return `
@@ -535,7 +375,7 @@ DEER.TEMPLATES.object = function (obj, options = {}) {
         <dd> ${UTILS.getSafeValue(obj.additionalType)}</dd>
 
         <dt>Former Locations:</dt>
-        <dd> ${obj.FormerLocations && UTILS.getSafeValue(obj.FormerLocations).items.reduce((a,b,i)=>a+=`<deer-view deer-template="completeLabel" deer-id="${b}">${i}</deer-view>`,``)}</dd>
+        <dd> ${obj.FormerLocations && UTILS.getSafeValue(obj.FormerLocations).items.reduce((a, b, i) => a += `<deer-view deer-template="completeLabel" deer-id="${b}">${i}</deer-view>`, ``)}</dd>
 
         <dt>Former Uses:</dt>
         <dd> ${obj.FormerUses && UTILS.getSafeValue(obj.FormerUses).items.join(", ")}</dd>
@@ -554,13 +394,10 @@ DEER.TEMPLATES.object = function (obj, options = {}) {
 
         </dl>
         `
-    } catch (err) { 
-        return null 
+    } catch (err) {
+        return null
     }
 }
-
-
-DEER.URLS.QUERY = "http://tiny.rerum.io/app/query"
 
 let LR_primitives = ["additionalType"]
 //let LR_experience_primitives = ["startDate", "location", "event", "relatedSenses", "relatedPractices", "relatedObjects"]
@@ -571,16 +408,5 @@ DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
 
-// Record is only needed for saving or updating items.
-// CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-//import { default as record, initializeDeerForms } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-record.js'
-
 // fire up the element detection as needed
-/**
- * Note that VIEWS can be building blocks of FORMS.  VIEWS may also be the FORM in its entirety.
- * It follows that VIEWS must finish populating to the DOM before initializing forms which interact with the
- * elements in the DOM to do things like pre-filling or pre-select values, which much exist in the DOM for such interaction.
- * We seek to streamline the logic around these threads in the near future.  Make sure these remain treated as asyncronous.
- */
 initializeDeerViews(DEER)
-//.then(() => initializeDeerForms(DEER))
