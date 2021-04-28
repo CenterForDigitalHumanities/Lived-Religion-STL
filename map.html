@@ -23,53 +23,63 @@ and open the template in the editor.
         .color1 {
             background-color: #336699;
         }
+
         .color2 {
             background-color: #00cc00;
         }
+
         .color3 {
             background-color: #ff9900;
         }
+
         .color4 {
             background-color: #ff3333;
         }
+
         .color5 {
             background-color: #800060;
         }
+
         .color6 {
             background-color: #b5a4a3;
         }
+
         .tag {
             color: white;
         }
+
         .grouped input {
             height: 1.5em;
             width: 5em !important;
         }
+
         .featureInfo {
             margin: 4px 0px;
             font-family: monospace;
         }
+
         .featureInfo label {
             margin-right: 6px;
             font-family: sans-serif;
         }
+
         .featureCompliance {
             text-align: center;
         }
-        #howTo {
-            margin-top: 2em;
-            font-size: 10pt;
-        }
+
         input[app] {
             margin: 2px 0px 5px 0px;
         }
+
         @keyframes color {
             0% {
                 background-color: white;
             }
+
             50% {
                 background-color: darkgrey;
             }
+
             100% {
                 background-color: white;
             }
@@ -79,40 +89,30 @@ and open the template in the editor.
 
 <body>
     <lr-nav></lr-nav>
-    
+
     <div class="container">
         <p id='howTo'>
             View the map below for rendered coordinate information. Pan and zoom are supported. Supplying direct
             coordinates is available below the map.
-            <a onclick="MAPINTERACTION.mymap.flyTo([38.6360699, -90.2348349],2)">[Shift] + [Z]</a> will zoom out for a
-            holistic view.
+            <a onclick="MAPINTERACTION.mymap.flyTo([38.6360699, -90.2348349],2)">
+                <kbd>Shift</kbd>+<kbd>Z</kbd></a> will zoom out for a holistic view.
             Clicking any dot on the map will show applicable information about the target when the URI is resolvable.
         </p>
         <div id="leafletInstanceContainer">
             <div id="loadingMessage" style="text-align: center;">Gathering Lived Religion Resource Coordinates...</div>
         </div>
 
-        <div class="card">
-            <header>Supply a latitude and longitude to fly to. Last Supplied Coordinates <span
-                    id="currentCoords">[38.6360699, -90.2348349]</span></header>
-            <div class="card_body">
-                <div class="grouped">
-                    <label>Latitude</label><input id="leafLat" type="number" />
-                    <label>Longitude</label><input id="leafLong" type="number" />
-                </div>
-            </div>
-            <footer>
-                <input id='goToCoords' value="Go To Coordinates" type="button" class="tag is-small"
-                    onclick="MAPINTERACTION.goToCoords(event)" />
-            </footer>
-        </div>
+        <footer>
+            <label>Latitude <input id="leafLat" type="number" /></label>
+            <label>Longitude <input id="leafLong" type="number" /></label>
+            <input class="button" id='goToCoords' value="Go To Coordinates" type="button" onclick="MAPINTERACTION.goToCoords(event)" />
+            <p>Current center: <span id="currentCoords">[38.6360699, -90.2348349]</span></p>
+        </footer>
     </div>
-    
+
     <lr-global-feedback></lr-global-feedback>
     <lr-footer></lr-footer>
-    
-    <!-- helper DOM -->
-    <div id="locations" deer-collection="LivedReligionLocations" class="deer-view col is-hidden"></div>
+
 </body>
 <script>
 

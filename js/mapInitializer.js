@@ -11,20 +11,21 @@ import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/d
 import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
 
 let MAP = {
+    COLLECTION: "LivedReligionLocationsTest",
     mymap: {}
 }
 
 MAP.init = async function () {
-    let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
     let latlong = [38.6360699, -90.2348349] //default starting coords
     document.getElementById("leafLat").oninput = MAP.updateGeometry
     document.getElementById("leafLong").oninput = MAP.updateGeometry
-
-    let expandedEntities = entitiesInCollection.map(async function (locationID) {
-        return await UTILS.expand({ "@id": locationID })
+    
+    let entitiesInCollection = await fetchLocations(MAP.COLLECTION)
+    let expandedEntities = entitiesInCollection.map(async function (location) {
+        return await UTILS.expand( location )
             .then(expandedLocation => {
-                let targetProps = { "targetID": UTILS.getValue(expandedLocation["@id"]), "label": UTILS.getLabel(expandedLocation), "description": UTILS.getValue(expandedLocation.description), "madeByApp": "Lived_Religion" }
-                return { "@id": expandedLocation.geometry.source.citationSource, "properties": targetProps, "type": "Feature", "geometry": expandedLocation.geometry.value }
+                let targetProps = { "targetID": expandedLocation["@id"] ?? expandedLocation.id, "label": UTILS.getLabel(expandedLocation), "description": UTILS.getValue(expandedLocation.description), "madeByApp": "Lived_Religion" }
+                return { "@id": expandedLocation.geometry?.source.citationSource, "properties": targetProps, "type": "Feature", "geometry": expandedLocation.geometry?.value }
             })
             .catch(err => {
                 console.error(err)
@@ -32,7 +33,7 @@ MAP.init = async function () {
             })
     })
     Promise.all(expandedEntities).then(LR_geos => {
-        return LR_geos.filter(geo => { return (geo.hasOwnProperty("geometry") && Object.keys(geo.geometry).length > 0) })
+        return LR_geos.filter(geo => { return geo.geometry?.type })
     })
         .then(filtered_geos => { MAP.initializeMap(latlong, filtered_geos) })
         .catch(err => {
@@ -125,13 +126,31 @@ MAP.pointEachFeature = function (feature, layer) {
 * @param {type} event
 * @returns {undefined}
 */
-addEventListener("deer-loaded", event => {
-    if (event.target.getAttribute("id") === "locations") {
-        let entitiesInCollection = Array.from(locations.querySelectorAll("li[deer-id]")).map(elem => elem.getAttribute("deer-id"))
-        MAP.init(entitiesInCollection)
-    }
-}, false)
+MAP.init()
 
+async function fetchLocations(collectionName) {
+    // Look not only for direct objects, but also collection annotations
+    // Only the most recent, do not consider history parent or children history nodes
+    let historyWildcard = { "$exists": true, "$size": 0 }
+    let queryObj = {
+        $or: [{
+            "targetCollection": collectionName
+        }, {
+            "body.targetCollection": collectionName
+        }],
+        "__rerum.history.next": historyWildcard
+    }
+    return fetch(DEER.URLS.QUERY, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(queryObj)
+    }).then(response => response.json())
+        .then(pointers => {
+            let list = []
+            pointers.map(tc => list.push(fetch(tc.target ?? tc["@id"] ?? tc.id).then(response => response.json()).catch(err => { console.log(err) })))
+            return Promise.all(list).then(l => l.filter(i => !i.hasOwnProperty("__deleted")))
+        })
+}
 // fire up the element detection as needed
 /**
  * Note that VIEWS can be building blocks of FORMS.  VIEWS may also be the FORM in its entirety.

@@ -1,109 +1,252 @@
-@import "https://unpkg.com/chota@latest";
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Lato&display=swap');
 
-.tabs {
-  white-space: nowrap;
+:root {
+  --bg-color          : #fff;
+  --bg-secondary-color: hsl(151deg 62% 74%);
+  --color-primary     : hsl(151deg 62% 44%);
+  --color-gray-100    : hsl(120, 5%, 90%);
+  --color-gray-300    : hsl(120, 5%, 70%);
+  --color-gray-500    : hsl(120, 5%, 50%);
+  --color-gray-700    : hsl(120, 5%, 30%);
+  --color-gray-900    : hsl(120, 5%, 10%);
+  --color-error       : #d43939;
+  --color-success     : #28bd14;
+  --grid-maxWidth     : 120rem;
+  --grid-gutter       : 2rem;
+  --font-size         : clamp(16px, 4vw, 22px);
+  --font-color-dark   : hsl(0, 0%, 20%);
+  --font-color-light  : hsl(0, 0%, 80%);
+  --font-family-sans  : -apple-system, BlinkMacSystemFont, Avenir, "Lato", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-family-mono  : monaco, "Consolas", "Lucida Console", monospace
 }
 
-textarea {
-  resize: vertical;
-  max-height: 20rem;
+*,
+:after,
+:before {
+  -webkit-box-sizing: inherit;
+  box-sizing        : inherit;
 }
 
-.needs-more {
-  display: inline-block;
+html {
+  -webkit-box-sizing      : border-box;
+  box-sizing              : border-box;
+  font-size               : 62.5%;
+  line-height             : 1.15;
+  -ms-text-size-adjust    : 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
-.needs-more::before {
-  content: "⚠ ";
-  color: red;
-  display: inline-block;
+body {
+  background-color: var(--color-gray-900);
+  line-height     : 1.6;
+  font-size       : var(--font-size);
+  color           : var(--font-color-dark);
+  font-family     : 'Lato', sans-serif;
+  font-family     : var(--font-family-sans);
+  margin          : 0;
+  padding         : 0;
 }
 
-/* Feedback */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Abel', var(--font-family-sans);
+  color      : var(--color-primary);
+}
+
+header h1 {
+  text-shadow     : -1px -1px 3px var(--color-gray-700);
+  background-color: var(--color-primary);
+  color           : var(--font-color-light);
+}
+
+.container {
+  max-width       : var(--grid-maxWidth);
+  margin          : 0 auto;
+  width           : 100%;
+  padding         : 0 calc(var(--grid-gutter)/2);
+  background-color: var(--bg-color);
+}
+
+.is-fixed {
+  position: fixed;
+  width   : 100%;
+}
+
+.is-vertical-align {
+  display          : -webkit-box;
+  display          : -ms-flexbox;
+  display          : flex;
+  -webkit-box-align: center;
+  -ms-flex-align   : center;
+  align-items      : center;
+}
+
+.is-horizontal-align {
+  margin: 0 auto;
+}
+
+.is-full-width {
+  width: 100% !important;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+lr-footer {
+  display         : flex;
+  width           : 100vw;
+  z-index         : 10;
+  bottom          : 0;
+  position        : fixed;
+  background-color: var(--color-gray-100);
+  justify-content : center;
+  align-items     : stretch;
+  font-size       : clamp(10px, 2vw, 16px);
+  box-shadow      : 0 3px 6px var(--color-gray-900);
+}
+
+lr-footer img {
+  max-height: clamp(1em, 5vw, 3em);
+}
+
+lr-footer>* {
+  margin: auto .5em;
+}
+
+kbd {
+  border          : var(--color-gray-700) solid 1px;
+  padding         : .1em;
+  font-size       : .9em;
+  color           : var(--font-color-light);
+  background-color: var(--color-gray-500);
+  border-radius   : 3px;
+}
+
+#leafletInstanceContainer {
+  height               : min(80vh, 50em);
+  background-image     : url(../images/earth.gif);
+  background-repeat    : no-repeat;
+  background-attachment: local;
+  background-position  : center -19em;
+  background-size      : 85em;
+  margin-bottom: calc(var(--grid-gutter)/2);
+  z-index: 2;
+}
 
 #globalFeedback {
-    visibility: hidden; 
-    min-width: 250px; 
-    margin-left: -125px;
-    text-align: center;
-    position: fixed; 
-    z-index: 9; 
-    left: 50%;
-    bottom: 30px;
-}
-  
-#globalFeedback.show {
-    visibility: visible; 
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  outline         : var(--color-success) solid 3px;
+  color           : var(--font-color-dark);
+  width           : clamp(10em, 10vw, 20em);
+  box-shadow      : 0 0 4px var(--color-gray-500);
+  background-color: var(--bg-color);
+  margin          : auto 2vw;
+  padding         : clamp(.15em, 1vw, 1em);
+  display         : none;
 }
 
-#leafletInstanceContainer{
-    height: 50em;
-    background-image: url(../images/earth.gif);
-    background-repeat: no-repeat;
-    background-attachment: local;
-    background-position: center -19em;
-    background-size: 85em;
-    border: 1px solid black;
+lr-nav {
+  -webkit-box-pack : center;
+  -ms-flex-pack    : center;
+  justify-content  : center;
+  -webkit-box-flex : 1;
+  -ms-flex         : 1;
+  flex             : 1;
+  display          : -webkit-box;
+  display          : -ms-flexbox;
+  display          : flex;
+  -webkit-box-align: stretch;
+  -ms-flex-align   : stretch;
+  align-items      : stretch;
 }
 
-#loadingMessage{
-    text-align: center;
-    background-color: white;
-    animation-name: color;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+lr-nav,
+lr-nav>.container {
+  display  : -webkit-box;
+  display  : -ms-flexbox;
+  display  : flex;
+  flex-wrap: wrap;
 }
 
-#currentCoords{
-    font-weight: bold;
+lr-nav img {
+  max-height: 3rem;
+  padding   : 0 1rem 0 2rem;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="color"]):not([type="button"]):not([type="reset"]), select, textarea, textarea[type="text"] {
+  font-family: inherit;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-gray-100);
+  font-size: 1em;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+.button,
+[type=button],
+[type=reset],
+[type=submit],
+button,
+lr-nav a {
+  outline         : var(--color-gray-100) solid 2px;
+  text-decoration : none;
+  padding         : .5em 1.2em;
+  background-color: var(--color-gray-100);
+  color           : var(--font-color-dark);
+  display         : block;
+  flex-basis      : 100%;
+  border          : 1px solid transparent;
+  font-size       : var(--font-size);
+  line-height     : 1;
+  text-align      : center;
+  transition      : opacity .2s ease;
+  text-decoration : none;
+  transform       : scale(1);
+  display         : inline-block;
+  cursor          : pointer;
+  outline-offset: 0px;
+  transition: all 200ms ease-out;
 }
 
- #goToCoords{
-    color: black;
-    border: 1px solid black;
+.button:hover,
+.button:focus,
+lr-nav a:hover,
+lr-nav a:focus {
+  outline-color: var(--color-gray-700);
+  outline-offset: -4px;
 }
 
-.pageShade{
-    z-index: 1;
-    background-color: rgba(0, 0, 0, .8);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
+.button.primary {
+  background-color: var(--color-primary);
+  color           : var(--font-color-light);
 }
 
-.removeCollectionItem {
-    display: none;
+lr-nav a {
+  margin : .2em;
+  padding: .4em;
 }
 
-.viewCollectionItem{
-    margin-left: .5rem
+.center {
+  text-align: center;
 }
 
-a.tag{
-    cursor: pointer;
-}
-  
-  /* Animations to fade in and out */
-  @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+@media screen and (min-width: 599px) {
+  lr-nav {
+    flex-wrap: nowrap;
   }
-  
-  @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
+
+  lr-nav a {
+    margin: 0 .2em;
   }
-  
-  @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+
+  .container {
+    width: 96%
   }
-  
-  @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+
+  .button,
+  lr-nav .tabs a {
+    flex-basis: auto;
   }
+}
