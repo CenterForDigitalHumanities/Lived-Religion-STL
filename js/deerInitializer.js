@@ -9,10 +9,10 @@
  */
 
 // Identify an alternate config location or only overwrite some items below.
-import { default as DEER } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-config.js'
+import { default as DEER } from 'https://deer.rerum.io/releases/alpha-0.11/deer-config.js'
 
 // Identify a UTILS package
-import { default as UTILS } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-utils.js'
+import { default as UTILS } from 'https://deer.rerum.io/releases/alpha-0.11/deer-utils.js'
 UTILS.getSafeValue = (property, alsoPeek, asType) => property ? UTILS.getValue(property, alsoPeek, asType) : ""
 
 DEER.URLS = {
@@ -406,7 +406,7 @@ DEER.PRIMITIVES = [...DEERprimitives, ...LR_primitives]
 
 // Render is probably needed by all items, but can be removed.
 // CDN at https://centerfordigitalhumanities.github.io/deer/releases/
-import { default as renderer, initializeDeerViews } from 'https://centerfordigitalhumanities.github.io/deer/releases/alpha-.11/deer-render.js'
+import { default as renderer, initializeDeerViews } from 'https://deer.rerum.io/releases/alpha-0.11/deer-render.js'
 
 // fire up the element detection as needed
 initializeDeerViews(DEER)
