@@ -309,31 +309,6 @@ DEER.TEMPLATES.Event = function (experienceData, options = {}) {
  * @param {type} options
  * @return {tmpl}
  */
-DEER.TEMPLATES.list = function (obj, options = {}) {
-    try {
-        let tmpl = ``
-        if (options.list) {
-            tmpl += `<ul>`
-            obj[options.list].forEach((val, index) => {
-                let currentKnownLabel = UTILS.getLabel(val, (val.type || val['@type'] || "")) //May not be the most recent.  
-                let name = `<deer-view deer-id="${val["@id"]}" deer-template="completeLabel">${currentKnownLabel}</deer-view>`
-                let viewBtn = (val["@id"] && options.link) ? `<a class="tag is-rounded is-small viewCollectionItem" title="View Item Details" href="${options.link}${val["@id"]}">&#x1F441</a>` : ``
-                tmpl += val["@id"] ? `<li ${DEER.ID}="${val["@id"]}">${name}${viewBtn}</li>` : `<li>${name}</li>`
-            })
-            tmpl += `</ul>`
-        }
-        else {
-            console.log("There are no items in this list to draw.")
-            console.log(obj)
-        }
-        return tmpl
-    } catch (err) {
-        console.log("Could not build list template.")
-        console.error(err)
-        return null
-    }
-
-}
 
 DEER.TEMPLATES.completeLabel = function (obj, options = {}) {
     try {

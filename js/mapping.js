@@ -14,7 +14,13 @@ MAPINTERACTION.goToCoords = function(event){
     if(leafLat.value && leafLong.value){
         let coords = [leafLat.value, leafLong.value]
         MAPINTERACTION.mymap.flyTo(coords,8)
-        document.getElementById("currentCoords").innerHTML = "["+coords.toString()+"]"
+        currentCoords.innerHTML = `[${coords.map(c=>Number(c).toFixed(4)).toString()}]`
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?result_type=locality&latlng=${leafLat.value},${leafLong.value}&key=AIzaSyD71M8UVpysp_j5EZ_234RPNhjq3nUur88`)
+        .then(r=>r.ok?r.json():Promise.reject(r.text()))
+        .then(res=>{
+            const nearby = res.results[0]?.address_components[0]?.long_name
+            currentCoords.innerHTML = `[${coords.map(c=>Number(c).toFixed(4)).toString()}] (${nearby ?? "no major city nearby"})`
+        })
     }
 }
 
