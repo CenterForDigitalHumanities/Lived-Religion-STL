@@ -11,7 +11,7 @@ import { default as UTILS } from 'https://deer.rerum.io/releases/alpha-0.11/deer
 import { default as renderer, initializeDeerViews } from 'https://deer.rerum.io/releases/alpha-0.11/deer-render.js'
 
 DEER.URLS = {
-    QUERY: "http://store.rerum.io/v1/api/getByProperties.action",
+    QUERY: "http://tiny.rerum.io/app/query",
     BASE_ID: "http://store.rerum.io/v1"
 }
 

@@ -148,7 +148,7 @@ kbd {
   display         : none;
 }
 
-lr-nav {
+lr-nav nav {
   -webkit-box-pack : center;
   -ms-flex-pack    : center;
   justify-content  : center;
@@ -163,12 +163,12 @@ lr-nav {
   align-items      : stretch;
 }
 
-lr-nav,
-lr-nav>.container {
+lr-nav nav,
+lr-nav nav>.container {
   display  : -webkit-box;
   display  : -ms-flexbox;
   display  : flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 lr-nav img {
